@@ -1,10 +1,10 @@
-FROM python:3
-
-WORKDIR /usr/src/app
-
-COPY requirements.txt ./
-RUN pip install --no-cache-dir -r requirements.txt
-
-COPY . .
-
-CMD [ "python", "./app.py" ]
+FROM python:3.8.3-slim
+COPY . /app
+WORKDIR /app
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
+    && pip install psycopg2
+RUN pip install -r requirements.txt
+EXPOSE 5000 
+ENTRYPOINT [ "python" ] 
+CMD [ "app.py" ]
